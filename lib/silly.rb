@@ -63,7 +63,7 @@ module Silly
 
     def execute
       @criteria["path"] ||= "*"
-      puts "EXECUTE:\n #{ @criteria.pretty_inspect }"
+      puts "EXECUTE:\n #{ @criteria.inspect }"
       data = files(@criteria["path"])
 
       unless @criteria["where"].empty?

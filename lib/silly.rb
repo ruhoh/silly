@@ -14,7 +14,7 @@ end
 
 module Silly
   FileSeparator = File::ALT_SEPARATOR ?
-                    %r{#{ File::SEPARATOR }|#{ File::ALT_SEPARATOR }} :
+                    %r{#{ File::SEPARATOR }|#{ File::ALT_SEPARATOR.gsub('\\', '\\\\\\\\') }} :
                     File::SEPARATOR
 
   class Query

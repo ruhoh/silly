@@ -20,6 +20,7 @@ module Silly
       filename_data = parse_page_filename(id)
       data['title'] ||= filename_data['title']
       data['date'] = parse_date(data['date'] || filename_data['date'])
+      data['_url'] = make_url(data)
 
       self.class.after_data.respond_to?(:call) ?
         self.class.after_data.call(data) :
@@ -39,6 +40,13 @@ module Silly
     end
 
     private
+
+    def make_url(data)
+      page_data = data.dup
+      format = page_data['permalink'] || "/:path/:filename"
+      slug = Silly::UrlSlug.new(item: self, data: page_data, format: format)
+      slug.generate
+    end
 
     # Parse and store date as an object
     def parse_date(date)

@@ -3,40 +3,35 @@ module Silly
     DateMatcher = /^(.+\/)*(\d+-\d+-\d+)-(.*)(\.[^.]+)$/
     Matcher = /^(.+\/)*(.*)(\.[^.]+)$/
 
-    # Process this file. See #parse_page_file
-    # @return[Hash] the processed data from the file.
-    #   ex:
-    #   { "content" => "..", "data" => { "key" => "value" } }
-    def process
+    def data
       return {} unless file?
 
-      parsed_page = Silly::Parse.page_file(realpath)
-      data = parsed_page['data']
-
-      filename_data = parse_page_filename(id)
-
-      data['pointer'] = pointer.dup
+      data = Silly::Parse.page_file(realpath)["data"]
       data['id'] = id
 
-      data['title'] = data['title'] || filename_data['title']
-      data['date'] ||= filename_data['date']
+      filename_data = parse_page_filename(id)
+      data['title'] ||= filename_data['title']
+      data['date'] = parse_date(data['date'] || filename_data['date'])
 
-      # Parse and store date as an object
-      begin
-        data['date'] = Time.parse(data['date']) unless data['date'].nil? || data['date'].is_a?(Time)
-      rescue
-        raise(
-          "ArgumentError: The date '#{data['date']}' specified in '#{ id }' is unparsable."
-        )
-        data['date'] = nil
-      end
+      data
+    end
 
-      parsed_page['data'] = data
-
-      parsed_page
+    def content
+      Silly::Parse.page_file(realpath)["content"]
     end
 
     private
+
+    # Parse and store date as an object
+    def parse_date(date)
+      return date if (date.nil? || date.is_a?(Time))
+
+      Time.parse(date)
+    rescue
+      raise(
+        "ArgumentError: The date '#{ date }' specified in '#{ id }' is unparsable."
+      )
+    end
 
     # Is the item backed by a physical file in the filesystem?
     # @return[Boolean]

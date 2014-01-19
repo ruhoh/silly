@@ -2,7 +2,7 @@ module Silly
   class Item
     include Observable
     attr_reader :pointer
-    attr_accessor :content, :collection
+    attr_accessor :data, :content, :collection
 
     def initialize(hash)
       @pointer = hash
@@ -48,12 +48,12 @@ module Silly
 
     # @returns[Hash Object] Top page metadata
     def data
-      @data ||= (_model.process["data"] || {})
+      @data ||= (_model.data || {})
     end
 
     # @returns[String] Raw page content
     def content
-      @content ||= (_model.process["content"] || "")
+      @content ||= (_model.content || "")
     end
 
     private

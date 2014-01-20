@@ -2,7 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), *%w[lib]))
 require 'rubygems'
 require 'rake'
 require 'bundler'
-require 'ruhoh/version'
+require 'silly/version'
 
 name = Dir['*.gemspec'].first.split('.').first
 gemspec_file = "#{name}.gemspec"

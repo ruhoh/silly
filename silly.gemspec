@@ -13,9 +13,9 @@ Gem::Specification.new do |s|
   s.description       = 'Silly is an ODM for parsing and querying a directory like you would a database -- useful for static websites.'
 
 
-  s.add_development_dependency 'cucumber'
-  s.add_development_dependency 'capybara'
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'cucumber', '~> 1'
+  s.add_development_dependency 'capybara', '~> 2'
+  s.add_development_dependency 'rspec', '~> 2'
 
   s.files = `git ls-files`.
               split("\n").

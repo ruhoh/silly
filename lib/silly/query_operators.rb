@@ -27,12 +27,7 @@ module Silly
     end
 
     def self.ne(attribute, value)
-      case attribute
-      when Array
-        !attribute.include?(value)
-      else
-        attribute != value
-      end
+      !self.equals(attribute, value)
     end
 
     def self.in(attribute, value)

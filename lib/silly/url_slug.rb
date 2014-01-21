@@ -15,13 +15,13 @@ module Silly
 
     def initialize(opts)
       @item = opts[:item]
-      @scope =  @item.id.split('/').first
+      @scope =  @item.id.index('/').nil? ? nil : @item.id.split('/').first
       @data = opts[:data]
       @format = opts[:format]
 
       parts = @item.id.split('/')
       parts.shift
-      @scoped_id = parts.join('/')
+      @scoped_id = @scope ? parts.join('/') : @item.id
     end
 
     # @return[String] URL Slug based on the given data and format.
@@ -118,7 +118,9 @@ module Silly
     end
 
     def path
-      File.join(@scope, relative_path)
+       @scope ?
+        File.join(@scope, relative_path) :
+        relative_path
     end
 
     private

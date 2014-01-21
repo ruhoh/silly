@@ -35,6 +35,14 @@ module Silly
       end
     end
 
+    def self.in(attribute, value)
+      value.include?(attribute)
+    end
+
+    def self.nin(attribute, value)
+      !self.in(attribute, value)
+    end
+
     def self.exclude(attribute, value)
       case attribute
       when Array

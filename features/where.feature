@@ -54,3 +54,30 @@ Feature: Query filter
         { "type" : {"$exists" : true } }
         """
     Then this query returns the ordered results "food/walnuts.html"
+
+  Scenario: Query with $in (in the set) filter
+    Given some files with values:
+      | file                | type  | size  |
+      | food/cranberry.html | fruit | med   |
+      | food/peanuts.html   | nuts  | small |
+      | food/walnuts.html   | nuts  | med   |
+    When I query the path "food"
+      And I filter the query with:
+        """
+        { "size" : { "$in" : ["small", "med"] } }
+        """
+    Then this query returns the ordered results "food/cranberry.html food/peanuts.html food/walnuts.html"
+
+  Scenario: Query with $nin (not in the set) filter
+    Given some files with values:
+      | file                | type  | size  |
+      | food/cranberry.html | fruit | med   |
+      | food/peanuts.html   | nuts  | small |
+      | food/walnuts.html   | nuts  | med   |
+    When I query the path "food"
+      And I filter the query with:
+        """
+        { "size" : { "$nin" : ["small", "large"] } }
+        """
+    Then this query returns the ordered results "food/cranberry.html food/walnuts.html"
+

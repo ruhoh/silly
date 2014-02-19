@@ -59,10 +59,11 @@ module Silly
     end
 
     def self.yaml(file)
+      require "yaml" unless defined?(YAML)
       YAML.load(file) || {}
-    rescue Psych::SyntaxError => e
-      raise("ERROR in #{filepath}: #{e.message}")
-      nil
+    rescue ::Psych::SyntaxError => e
+     raise("ERROR in #{filepath}: #{e.message}")
+     nil
     end
 
     def self.json(file)
@@ -71,8 +72,9 @@ module Silly
 
     def self.yaml_for_pages(front_matter, filepath)
       return {} unless front_matter
+      require "yaml" unless defined?(YAML)
       YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
-    rescue Psych::SyntaxError => e
+    rescue ::Psych::SyntaxError => e
       raise("Psych::SyntaxError while parsing top YAML Metadata in #{ filepath }\n" +
         "#{ e.message }\n" +
         "Try validating the YAML metadata using http://yamllint.com"

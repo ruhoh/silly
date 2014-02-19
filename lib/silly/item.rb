@@ -46,6 +46,20 @@ module Silly
       File.extname(id)
     end
 
+    def data?
+      %w{ .json .yaml .yml }.include?(ext)
+    end
+
+    def text?
+      !!mime_types.find do |a|
+        a.to_s.start_with?('text') || a.to_s == "application/json"
+      end
+    end
+
+    def binary?
+      !text?
+    end
+
     # @returns[Hash Object] Top page metadata
     def data
       @data ||= (_model.data || {})
@@ -56,13 +70,19 @@ module Silly
       @content ||= (_model.content || "")
     end
 
+    def mime_types
+      MIME::Types.type_for(realpath)
+    end
+
     private
 
     def _model
       return @_model if @_model
 
-      klass = if model == "data"
+      klass = if data?
                 Silly::DataModel
+              elsif binary?
+                Silly::BinaryModel
               else
                 Silly::PageModel
               end

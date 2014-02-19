@@ -9,6 +9,8 @@ require 'observer'
 require 'set'
 require 'cgi'
 
+require 'mime/types'
+
 FileUtils.cd(path = File.join(File.dirname(__FILE__), 'silly')) do
   Dir[File.join('**', '*.rb')].each { |f| require File.join(path, f) }
 end

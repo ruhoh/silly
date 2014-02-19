@@ -86,5 +86,40 @@ module Silly
       return {} unless front_matter
       JSON.load(front_matter[0]) || {}
     end
+
+    DateMatcher = /^(.+\/)*(\d+-\d+-\d+)-(.*)(\.[^.]+)$/
+    Matcher = /^(.+\/)*(.*)(\.[^.]+)$/
+
+    def self.filename(filename)
+      data = *filename.match(DateMatcher)
+      data = *filename.match(Matcher) if data.empty?
+      return {} if data.empty?
+
+      if filename =~ DateMatcher
+        {
+          "path" => data[1],
+          "date" => data[2],
+          "slug" => data[3],
+          "title" => to_title(data[3]),
+          "extension" => data[4]
+        }
+      else
+        {
+          "path" => data[1],
+          "slug" => data[2],
+          "title" => to_title(data[2]),
+          "extension" => data[3]
+        }
+      end
+    end
+
+    # my-post-title ===> My Post Title
+    def self.to_title(file_slug)
+      if file_slug == 'index' && !file_slug.index('/').nil?
+        file_slug = file_slug.split('/')[-2]
+      end
+
+      file_slug
+    end
   end
 end

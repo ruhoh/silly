@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.authors           = ['Jade Dominguez']
   s.description       = 'Silly is an ODM for parsing and querying a directory like you would a database -- useful for static websites.'
 
+  s.add_dependency 'mime-types', "~> 2.1"
 
   s.add_development_dependency 'cucumber', '~> 1'
   s.add_development_dependency 'capybara', '~> 2'

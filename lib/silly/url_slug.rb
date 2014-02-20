@@ -1,18 +1,5 @@
 module Silly
   class UrlSlug
-    @convertable_extensions = %w{ .md .markdown .mustache .haml .erb }
-    class << self
-      attr_reader :convertable_extensions
-
-      def add_extensions(ext)
-        if ext.is_a?(Array)
-          @convertable_extensions += ext
-        else
-          @convertable_extensions << ext
-        end
-      end
-    end
-
     def initialize(opts)
       @item = opts[:item]
       @scope =  @item.id.index('/').nil? ? nil : @item.id.split('/').first
@@ -151,7 +138,7 @@ module Silly
     def process_url_extension(url)
       return url if uses_extension?
 
-      url += self.class.convertable_extensions.include?(ext) ? '.html' : ext
+      url += Silly.html_extensions.include?(ext) ? '.html' : ext
 
       url.gsub(/index|index.html$/, '').gsub(/\.html$/, '')
     end

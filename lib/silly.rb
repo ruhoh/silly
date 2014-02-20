@@ -20,6 +20,31 @@ module Silly
                     %r{#{ File::SEPARATOR }|#{ File::ALT_SEPARATOR.gsub('\\', '\\\\\\\\') }} :
                     File::SEPARATOR
 
+  @html_extensions = []
+  class << self
+    attr_reader :html_extensions
+
+    def add_html_extensions(ext)
+      if ext.is_a?(Array)
+        @html_extensions += ext
+      else
+        @html_extensions << ext
+      end
+
+      update_mime_types(@html_extensions)
+    end
+
+    private
+
+    def update_mime_types(extensions)
+      a = MIME::Type.new("text/html")
+      a.extensions = extensions
+      MIME::Types.add(a, :silent)
+    end
+  end
+
+  add_html_extensions(%w{ md markdown mustache haml erb })
+
   class Query
     include Enumerable
     attr_accessor :paths

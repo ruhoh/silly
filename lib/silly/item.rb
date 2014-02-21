@@ -4,6 +4,21 @@ module Silly
     attr_reader :pointer
     attr_accessor :data, :content, :collection
 
+    # File attributes are special attributes that
+    # may be queried by prepending a $ to the attribute name.
+    # Example: where({ "$ext" => ".md" })
+    FileAttributes = %w{
+      id
+      filename
+      shortname
+      ext
+      relative_shortname
+      directories
+      binary?
+      text?
+      data?
+    }
+
     def initialize(hash)
       @pointer = hash
     end
@@ -25,25 +40,23 @@ module Silly
     end
 
     def filename
-      @filename ||= id.gsub(Regexp.new("#{ ext }$"), '')
+      File.basename(id)
     end
 
     def shortname
       File.basename(id, ext)
     end
 
-    def directories
-      File.dirname(id).split(Silly::FileSeparator)
-    end
-
-    def model
-      %w{ .json .yaml .yml }.include?(ext) ? 
-        "data" :
-        "page"
+    def relative_shortname
+      @filename ||= id.gsub(Regexp.new("#{ ext }$"), '')
     end
 
     def ext
       File.extname(id)
+    end
+
+    def directories
+      File.dirname(id).split(Silly::FileSeparator)
     end
 
     def data?

@@ -151,8 +151,6 @@ module Silly
       dict
     end
 
-    FileAttributes = %{ id filename shortname directories ext }
-
     def filter_function(item)
       @criteria["where"].each do |condition|
         condition.each do |attribute_name, value|
@@ -173,7 +171,7 @@ module Silly
       direction = @criteria["sort"][1].to_s
 
       # Optmization to omit parsing internal metadata when unecessary.
-      if FileAttributes.include?(attribute)
+      if Silly::Item::FileAttributes.include?(attribute)
         this_data = a.__send__(attribute)
         other_data = b.__send__(attribute)
       else
